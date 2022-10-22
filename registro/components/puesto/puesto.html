@@ -1,0 +1,116 @@
+<div class="form-group col-md-4">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="puesto.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-4">
+	<label>Dirección<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Dirección..." data-ng-model="puesto.direccion" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-4">
+	<label>Departamento<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="puesto.departamento" data-ng-options="m as m.nombre for m in puesto.departamentoLista" data-ng-change="puesto.cargarMunicipios(1)"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Municipio<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="puesto.municipio" data-ng-options="m as m.nombre for m in puesto.municipioLista" data-ng-disabled="puesto.departamento.id==null"/>
+</div>
+<div class="form-group col-md-2">
+	<button type="button" class="btn btn-danger btnHorizontal" data-ng-disabled="puesto.nombre=='' || puesto.direccion=='' || puesto.departamento.id==null || puesto.municipio.id==null" data-ng-click="puesto.guardar()">Guardar</button>
+</div>
+<div class="col-md-12">
+	<h4>Listado de Puesto Votación</h4>
+</div>
+<div class="form-group col-md-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="puesto.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Puesto</th>
+        <th>Dirección</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in puesto.lista | filter:puesto.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.departamento.nombre}}</td>
+	    <td>{{x.municipio.nombre}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.direccion}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="puesto.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="puesto.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar Puesto Votación</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="puesto.nombreEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Dirección<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="puesto.direccionEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Departamento<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in puesto.departamentoLista track by m.id" data-ng-model="puesto.departamentoEditar"/>
+				<label>Municipio<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in puesto.municipioListaEditar track by m.id" data-ng-model="puesto.municipioEditar"/>
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="puesto.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-ng-disabled="puesto.nombreEditar=='' || puesto.direccionEditar=='' || puesto.departamentoEditar.id==null || puesto.municipioEditar.id==null" data-ng-click="puesto.editar()">Editar</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{puesto.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{puesto.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

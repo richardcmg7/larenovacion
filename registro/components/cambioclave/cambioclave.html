@@ -1,0 +1,53 @@
+<div class="form-group col-md-12">
+	<b>Nota:</b><span> La Nueva Contraseña debe tener por lo menos 8 caracteres.</span>
+</div>
+<div class="form-group col-md-3">
+	<label>Número de Cedula<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Número de Cedula..." data-ng-model="cambioclave.usuario.nombre" readonly="readonly" style="background-color: #fff;">
+</div>
+<div class="form-group col-md-3">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="cambioclave.usuario.nombrePersona" readonly="readonly" style="background-color: #fff;">
+</div>
+<div class="form-group col-md-3">
+	<label>Contraseña actual<span class="asteObli">*</span></label>
+	<input type="password" class="form-control" placeholder="Contraseña actual..." data-ng-model="cambioclave.actual">
+</div>
+<div class="form-group col-md-3">
+	<label>Nueva Contraseña<span class="asteObli">*</span></label>
+	<input type="password" class="form-control" placeholder="Nueva Contraseña..." data-ng-model="cambioclave.nueva">
+</div>
+
+<div class="form-group col-md-4">
+	<button type="button" class="btn btn-danger" data-ng-disabled="cambioclave.usuario.nombre==null || cambioclave.actual=='' || cambioclave.nueva==''" data-ng-click="cambioclave.guardar()">Actualizar contraseña</button>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{cambioclave.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{cambioclave.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

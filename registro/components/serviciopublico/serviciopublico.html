@@ -1,0 +1,94 @@
+<div class="form-group col-xs-5">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<div class="input-group">
+	  <input type="text" class="form-control" placeholder="Nombre..." data-ng-model="serviciopublico.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();">
+	  <div class="input-group-btn">
+	    <button type="button" class="btn btn-danger" data-ng-disabled="serviciopublico.nombre==''" data-ng-click="serviciopublico.guardar()">Guardar</button>
+	  </div>
+	</div>
+</div>
+<div class="col-xs-12">
+	<h4>Listado de Servicios Publicos</h4>
+</div>
+<div class="form-group col-xs-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="serviciopublico.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-xs-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in serviciopublico.lista | filter:serviciopublico.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="serviciopublico.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="serviciopublico.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar Grupo Sanguineo y Factor RH</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="serviciopublico.nombreEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="serviciopublico.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-ng-disabled="serviciopublico.nombreEditar==''" data-ng-click="serviciopublico.editar()">Editar</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{serviciopublico.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{serviciopublico.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

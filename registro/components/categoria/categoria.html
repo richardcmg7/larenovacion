@@ -1,0 +1,110 @@
+<div class="form-group col-md-4">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="categoria.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-4">
+	<label>Ubicación<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="categoria.ubicacion">
+		<option value=""></option>
+		<option value="MUNICIPAL">MUNICIPAL</option>
+		<option value="DEPARTAMENTAL">DEPARTAMENTAL</option>
+		<option value="NACIONAL">NACIONAL</option>
+	</select>
+</div>
+<div class="form-group col-md-2">
+	<button type="button" class="btn btn-danger btnHorizontal" data-ng-disabled="categoria.nombre=='' || categoria.ubicacion==''" data-ng-click="categoria.guardar()">Guardar</button>
+</div>
+<div class="col-md-12">
+	<h4>Listado de Categorias Políticas</h4>
+</div>
+<div class="form-group col-md-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="categoria.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Ubicacion</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in categoria.lista | filter:categoria.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.ubicacion}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="categoria.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="categoria.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar Categoria Política</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="categoria.nombreEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Ubicación<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="categoria.ubicacionEditar">
+					<option value=""></option>
+					<option value="MUNICIPAL">MUNICIPAL</option>
+					<option value="DEPARTAMENTAL">DEPARTAMENTAL</option>
+					<option value="NACIONAL">NACIONAL</option>
+				</select>
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="categoria.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-ng-disabled="categoria.nombreEditar=='' || categoria.ubicacionEditar==''" data-ng-click="categoria.editar()">Editar</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{categoria.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{categoria.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

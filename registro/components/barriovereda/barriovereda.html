@@ -1,0 +1,132 @@
+<div class="form-group col-md-4">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="barriovereda.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-4">
+	<label>Departamento<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="barriovereda.departamento" data-ng-options="m as m.nombre for m in barriovereda.departamentoLista" data-ng-change="barriovereda.cargarMunicipios(1)"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Municipio<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="barriovereda.municipio" data-ng-options="m as m.nombre for m in barriovereda.municipioLista" data-ng-disabled="barriovereda.departamento.id==null" data-ng-change="barriovereda.cargarLocalidades(1)"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Localidad<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="barriovereda.localidad" data-ng-options="m as m.nombre for m in barriovereda.localidadLista" data-ng-disabled="barriovereda.departamento.id==null || barriovereda.municipio.id==null" data-ng-change="barriovereda.cargarComunas(1)"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Comuna<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="barriovereda.comuna" data-ng-options="m as m.nombre for m in barriovereda.comunaLista" data-ng-disabled="barriovereda.departamento.id==null || barriovereda.municipio.id==null || barriovereda.localidad.id==null"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Zona Residencia<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="barriovereda.zonaResidencia" data-ng-options="m as m.nombre for m in barriovereda.zonaResidenciaLista"/>
+</div>
+<div class="form-group col-md-4">
+	<button type="button" class="btn btn-danger" data-ng-disabled="barriovereda.nombre=='' || barriovereda.departamento.id==null || barriovereda.municipio.id==null || barriovereda.localidad.id==null || barriovereda.comuna.id==null || barriovereda.zonaResidencia.id==null" data-ng-click="barriovereda.guardar()">Guardar</button>
+</div>
+<div class="col-md-12">
+	<h4>Listado de Barrios/Veredas</h4>
+</div>
+<div class="form-group col-md-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="barriovereda.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Localidad</th>
+        <th>Comuna</th>
+        <th>Zona Residencia</th>
+        <th>Barrio/Vereda</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in barriovereda.lista | filter:barriovereda.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.departamento.nombre}}</td>
+	    <td>{{x.municipio.nombre}}</td>
+	    <td>{{x.localidad.nombre}}</td>
+	    <td>{{x.comuna.nombre}}</td>
+	    <td>{{x.zonaResidencia.nombre}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="barriovereda.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="barriovereda.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar Barrio/Vereda</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="barriovereda.nombreEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Departamento<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in barriovereda.departamentoLista track by m.id" data-ng-model="barriovereda.departamentoEditar" data-ng-change="barriovereda.cargarMunicipios(2)"/>
+				<label>Municipio<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in barriovereda.municipioListaEditar track by m.id" data-ng-model="barriovereda.municipioEditar" data-ng-disabled="barriovereda.departamentoEditar.id==null" data-ng-change="barriovereda.cargarLocalidades(2)"/>
+				<label>Localidad<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in barriovereda.localidadListaEditar track by m.id" data-ng-model="barriovereda.localidadEditar" data-ng-disabled="barriovereda.departamentoEditar.id==null || barriovereda.municipioEditar.id==null" data-ng-change="barriovereda.cargarComunas(2)"/>
+				<label>Comuna<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in barriovereda.comunaListaEditar track by m.id" data-ng-model="barriovereda.comunaEditar" data-ng-disabled="barriovereda.departamentoEditar.id==null || barriovereda.municipioEditar.id==null || barriovereda.localidadEditar.id==null"/>
+				<label>Zona Residencia<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in barriovereda.zonaResidenciaLista track by m.id" data-ng-model="barriovereda.zonaResidenciaEditar"/>
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="barriovereda.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-ng-disabled="barriovereda.nombreEditar=='' || barriovereda.departamentoEditar.id==null || barriovereda.municipioEditar.id==null || barriovereda.localidadEditar.id==null || barriovereda.comunaEditar.id==null || barriovereda.zonaResidenciaEditar.id==null" data-ng-click="barriovereda.editar()">Editar</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{barriovereda.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{barriovereda.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

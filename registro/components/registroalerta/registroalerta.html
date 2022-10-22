@@ -1,0 +1,27 @@
+<div class="form-group col-xs-12">
+	<button type="button" class="btn btn-success" data-ng-click="registroalerta.consultar()">Actualizar</button>
+</div>
+<div class="form-group col-xs-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="registroalerta.filtro">
+</div>
+<div class="form-group col-xs-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Persona</th>
+        <th style="text-align: center;">Ubicación</th>
+        <th style="text-align: center;">Demográfica</th>
+        <th style="text-align: center;">Votación</th>
+      </tr>
+      <tr data-ng-repeat="x in registroalerta.lista | filter:registroalerta.filtro">
+	    <td title="{{$index + 1}}">{{$index + 1}}</td>
+	    <td style="text-decoration: underline; cursor: pointer;"><span data-ng-click="registroalerta.seleccionar(x)">{{x.persona}}</span></td>
+      <td style="text-align: center;"><span data-ng-class="{siAlerta: x.ubicacion == 'Si', noAlerta: x.ubicacion == 'No'}">{{x.ubicacion}}</span></td>
+	    <td style="text-align: center;"><span data-ng-class="{siAlerta: x.demografica == 'Si', noAlerta: x.demografica == 'No'}">{{x.demografica}}</span></td>
+	    <td style="text-align: center;"><span data-ng-class="{siAlerta: x.lugarVotacion == 'Si', noAlerta: x.lugarVotacion == 'No'}">{{x.lugarVotacion}}</span></td>
+	  </tr>
+    </tbody>
+  </table>
+</div>

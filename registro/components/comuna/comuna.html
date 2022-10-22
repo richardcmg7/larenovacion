@@ -1,0 +1,115 @@
+<div class="form-group col-md-4">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="comuna.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-4">
+	<label>Departamento<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="comuna.departamento" data-ng-options="m as m.nombre for m in comuna.departamentoLista" data-ng-change="comuna.cargarMunicipios(1)"/>
+</div>
+<div class="form-group col-md-4">
+	<label>Municipio<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="comuna.municipio" data-ng-options="m as m.nombre for m in comuna.municipioLista" data-ng-disabled="comuna.departamento.id==null" data-ng-change="comuna.cargarLocalidades(1)"/>
+</div><div class="form-group col-md-4">
+	<label>Localidad<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="comuna.localidad" data-ng-options="m as m.nombre for m in comuna.localidadLista" data-ng-disabled="comuna.departamento.id==null || comuna.municipio.id==null" />
+</div>
+<div class="form-group col-md-2">
+	<button type="button" class="btn btn-danger btnHorizontal" data-ng-disabled="comuna.nombre=='' || comuna.departamento.id==null || comuna.municipio.id==null || comuna.localidad.id==null" data-ng-click="comuna.guardar()">Guardar</button>
+</div>
+<div class="col-md-12">
+	<h4>Listado de Comunas</h4>
+</div>
+<div class="form-group col-md-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="comuna.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Departamento</th>
+        <th>Municipio</th>
+        <th>Localidad</th>
+        <th>Comuna</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in comuna.lista | filter:comuna.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.departamento.nombre}}</td>
+	    <td>{{x.municipio.nombre}}</td>
+	    <td>{{x.localidad.nombre}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="comuna.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="comuna.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar Comuna</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="comuna.nombreEditar" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+				<label>Departamento<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in comuna.departamentoLista track by m.id" data-ng-model="comuna.departamentoEditar" data-ng-change="comuna.cargarMunicipios(2)"/>
+				<label>Municipio<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in comuna.municipioListaEditar track by m.id" data-ng-model="comuna.municipioEditar" data-ng-change="comuna.cargarLocalidades(2)"/>
+				<label>Localidad<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-options="m as m.nombre for m in comuna.localidadListaEditar track by m.id" data-ng-model="comuna.localidadEditar" data-ng-disabled="comuna.departamentoEditar.id==null || comuna.municipioEditar.id==null" />
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="comuna.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-ng-disabled="comuna.nombreEditar=='' || comuna.departamentoEditar.id==null || comuna.municipioEditar.id==null || comuna.localidadEditar.id==null" data-ng-click="comuna.editar()">Editar</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{comuna.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{comuna.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

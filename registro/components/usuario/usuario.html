@@ -1,0 +1,146 @@
+<div class="form-group col-md-4">
+	<label>Nùmero de Cedula<span class="asteObli">*</span></label>
+	<div class="input-group input-group-sm">
+    <input type="text" class="form-control" placeholder="Nùmero de Cedula..." data-ng-model="usuario.usuario" numbers-Only/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-success btn-flat" data-ng-click="usuario.buscarPersona()">Ir</button>
+        </span>
+  </div>
+</div>
+<div class="form-group col-md-4">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="usuario.nombre" readonly="readonly" style="background-color: #fff" >
+</div>
+<div class="form-group col-md-4">
+	<label>Clave<span class="asteObli">*</span></label>
+	<input type="password" class="form-control" placeholder="Constraseña..." data-ng-model="usuario.clave">
+</div>
+<div class="form-group col-md-4">
+	<label>Tipo<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="usuario.tipo" data-ng-change="usuario.selectTipo(1)">
+		<option value="">Seleccione</option>
+		<option value="1">ADMINISTRADOR</option>
+		<option value="2">LIDER</option>
+		<option value="3">COLABORADOR</option>
+		<option value="4">MARKETING</option>
+		<option value="5">ESCRUTINIO</option>
+	</select>
+</div>
+<div class="form-group col-md-4" data-ng-show="usuario.tipo==2 || usuario.tipo==3 || usuario.tipo==4">
+	<label>Departamento<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="usuario.departamento" data-ng-options="m as m.nombre for m in usuario.departamentoLista" data-ng-change="usuario.cargarMunicipios()"/>
+</div>
+<div class="form-group col-md-4" data-ng-show="usuario.tipo==2 || usuario.tipo==3 || usuario.tipo==4">
+	<label>Municipio<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="usuario.municipio" data-ng-options="m as m.nombre for m in usuario.municipioLista" data-ng-disabled="usuario.departamento.id==null"/>
+</div>
+<div class="form-group col-md-2">
+	<button type="button" class="btn btn-danger btnHorizontal" data-ng-disabled="usuario.nombre=='' || usuario.usuario=='' || usuario.clave=='' || usuario.tipo=='' || ((usuario.tipo==2 || usuario.tipo==3 || usuario.tipo==4) && (usuario.departamento.id==null || usuario.municipio.id==null))" data-ng-click="usuario.guardar()">Guardar</button>
+</div>
+<div class="col-md-12">
+	<h4>Listado de Usuarios</h4>
+</div>
+<div class="form-group col-md-12">
+  <label>Filtrar</label>
+  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="usuario.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Tipo</th>
+        <th>Municipio</th>
+        <th>Estado</th>
+        <th style="width: 35px"></th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in usuario.lista | filter:usuario.filtro" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.nombre}}</td>
+	    <td>{{x.usuario}}</td>
+	    <td>{{x.tipoNombre}}</td>
+	    <td>{{x.lugar}}</td>
+	    <td>{{x.estadoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-success btnLista" title="Editar" data-ng-click="usuario.seleccionar(x)" data-toggle="modal" data-target="#modalEditar"><i class="fa fa-edit"></i></button>
+	    </td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="usuario.eliminar(x)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="modalEditar">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Editar usuario</h4>
+			</div>
+			<div class="modal-body">
+				<label>Nombre<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="usuario.nombreEditar" readonly="readonly" style="background-color: #fff" />
+				<label>Tipo<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="usuario.tipoEditar" data-ng-change="usuario.selectTipo(2)">
+					<option value="1">ADMINISTRADOR</option>
+					<option value="2">LIDER</option>
+					<option value="3">COLABORADOR</option>
+					<option value="4">MARKETING</option>
+					<option value="5">ESCRUTINIO</option>
+				</select>
+				<label data-ng-show="usuario.tipoEditar==2 || usuario.tipoEditar==3 || usuario.tipoEditar==4">Departamento<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="usuario.departamentoEditar" data-ng-options="m as m.nombre for m in usuario.departamentoLista track by m.id" data-ng-change="usuario.cargarMunicipiosEditar(1)" data-ng-show="usuario.tipoEditar==2 || usuario.tipoEditar==3 || usuario.tipoEditar==4"/>
+				<label data-ng-show="usuario.tipoEditar==2 || usuario.tipoEditar==3 || usuario.tipoEditar==4">Municipio<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="usuario.municipioEditar" data-ng-options="m as m.nombre for m in usuario.municipioListaEditar track by m.id" data-ng-disabled="usuario.departamentoEditar.id==null" data-ng-show="usuario.tipoEditar==2 || usuario.tipoEditar==3 || usuario.tipoEditar==4"/>
+				<label>Estado<span class="asteObli">*</span></label>
+				<select class="form-control" data-ng-model="usuario.estadoEditar">
+					<option value="a">ACTIVO</option>
+					<option value="i">INACTIVO</option>
+				</select>
+				<button type="button" class="btn btn-success" data-ng-disabled="usuario.nombreEditar=='' || ((usuario.tipoEditar==2 || usuario.tipoEditar==3 || usuario.tipoEditar==4) && (usuario.departamentoEditar.id==null || usuario.municipioEditar.id==null))" data-ng-click="usuario.editarInfo()" style="margin-top:12px; margin-bottom: 12px;">Editar Informacion</button>
+				<br>
+				<label>Usuario<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="usuario.usuarioEditar" readonly="readonly" style="background-color: #fff"/>
+				<label>Nueva Contraseña<span class="asteObli">*</span></label>
+				<input type="text" class="form-control" data-ng-model="usuario.claveEditar"/>
+				<button type="button" class="btn btn-success" data-ng-disabled="usuario.usuarioEditar=='' || usuario.claveEditar==''" data-ng-click="usuario.editarCrede()" style="margin-top:12px; margin-bottom: 12px;">Editar Credenciales</button>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{usuario.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{usuario.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>

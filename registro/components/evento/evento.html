@@ -1,0 +1,185 @@
+<link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<div class="form-group col-md-6">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="evento.nombre" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+</div>
+<div class="form-group col-md-3">
+	<label>Fecha Inicio<span class="asteObli">*</span></label>
+	<div class="input-group date">
+    <div class="input-group-addon">
+      <i class="fa fa-calendar"></i>
+    </div>
+    <input type="text" class="form-control pull-right" id="datepicker" data-ng-model="evento.fechaInicio" autocomplete="off"/>
+  </div>
+</div>
+<div class="form-group col-md-3">
+	<label>Fecha Finalización<span class="asteObli">*</span></label>
+	<div class="input-group date">
+    <div class="input-group-addon">
+      <i class="fa fa-calendar"></i>
+    </div>
+    <input type="text" class="form-control pull-right" id="datepicker2" data-ng-model="evento.fechaFinalizacion" autocomplete="off"/>
+  </div>
+</div>
+<div class="form-group col-md-12">
+	<label>Descripción</label>
+	<textarea class="form-control" placeholder="Descripción..." data-ng-model="evento.descripcion" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+</div>
+<div class="form-group col-md-12">
+	<label>Colaborador<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Colaborador..." data-ng-model="evento.usuario.nombrePersona" readonly="readonly" style="background-color: #fff" />
+</div>
+
+<div class="col-md-12">
+	<h4>Agregar Personal de Apoyo</h4>
+</div>
+<div class="form-group col-md-4">
+	<label>Nùmero de Cedula<span class="asteObli">*</span></label>
+	<div class="input-group">
+    <input type="text" class="form-control" placeholder="Nùmero de Cedula..." data-ng-model="evento.documento" numbers-Only/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-success btn-flat" data-ng-click="evento.buscarPersona()"><i class="fa fa-fw fa-search"></i></button>
+      </span>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-danger btn-flat" data-ng-click="evento.abrirModalPersona()"><i class="fa fa-fw fa-user-plus"></i></button>
+      </span>
+  </div>
+</div>
+<div class="form-group col-md-5">
+	<label>Nombre<span class="asteObli">*</span></label>
+	<input type="text" class="form-control" placeholder="Nombre..." data-ng-model="evento.nombrePersona" readonly="readonly" style="background-color: #fff" >
+</div>
+<div class="form-group col-md-3">
+	<label>Tipo Personal Apoyo<span class="asteObli">*</span></label>
+	<select class="form-control" data-ng-model="evento.tipoPersonalApoyo" data-ng-options="m as m.nombre for m in evento.tipoPersonalApoyoLista"/>
+</div>
+<div class="form-group col-md-12">
+	<button type="button" class="btn btn-success" data-ng-click="evento.agregarPersona()">Agregar</button>
+	<button type="button" class="btn btn-danger" data-ng-click="evento.limpiarPersona()">Limpiar</button>
+</div>
+<div class="form-group col-md-12 table-responsive">
+  <table class="table" style="background-color: #fff">
+    <tbody>
+      <tr class="tableTr">
+        <th style="width: 10px">#</th>
+        <th>Persona</th>
+        <th>Tipo Personal Apoyo</th>
+        <th style="width: 35px"></th>
+      </tr>
+      <tr data-ng-repeat="x in evento.personalApoyoLista" class="trItem">
+	    <td>{{$index + 1}}</td>
+	    <td>{{x.persona}}</td>
+	    <td>{{x.tipoNombre}}</td>
+	    <td>
+	    	<button type="button" class="btn btn-danger btnLista" title="Eliminar" data-ng-click="evento.eliminarPersona($index)"><i class="fa fa-trash"></i></button>
+	    </td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-group col-md-12">
+	<button type="button" class="btn btn-success" data-ng-click="evento.guardar()">Guardar</button>
+</div>
+
+<div class="modal fade" id="modalPersonas">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+				  <label>Filtrar</label>
+				  <input type="text" class="form-control" placeholder="Filtrar..." data-ng-model="evento.filtro" onkeyup="javascript:this.value=this.value.toUpperCase();">
+				</div>
+				<div class="form-group table-responsive">
+				  <table class="table" style="background-color: #fff">
+				    <tbody>
+				      <tr class="tableTr">
+				        <th style="width: 10px">#</th>
+				        <th>Nùmero de Cedula</th>
+				        <th>Nombre</th>
+				      </tr>
+				      <tr data-ng-repeat="x in evento.personasLista | filter:evento.filtro" class="trItem" data-ng-click="evento.selectPersona(x)">
+						    <td>{{$index + 1}}</td>
+						    <td>{{x.documento}}</td>
+						    <td>{{x.nombre}}</td>
+						  </tr>
+				    </tbody>
+				  </table>
+				</div>
+			</div>
+		</div>
+  </div>
+</div>
+
+<div class="modal modal-success fade" id="modalBien">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Bien !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{evento.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalError">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Error !</h4>
+			</div>
+			<div class="modal-body">
+				<p>{{evento.mensaje.mensaje}}</p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<div class="modal modal-danger fade" id="modalValidate">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">Faltan Datos</h4>
+			</div>
+			<div class="modal-body">
+				<p id="validacionTexto"></p>
+			</div>
+		</div>
+  	</div>
+</div>
+
+<!-- bootstrap datepicker -->
+<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- bootstrap color picker -->
+<script src="bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+
+<script type="text/javascript">
+	$(function () {
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true,
+      format: 'yyyy-mm-dd'
+    })
+
+    //Date picker
+    $('#datepicker2').datepicker({
+      autoclose: true,
+      format: 'yyyy-mm-dd'
+    })
+
+  })
+
+</script>
